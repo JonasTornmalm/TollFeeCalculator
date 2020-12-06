@@ -12,7 +12,6 @@ namespace TollFeeCalculatorTest
         [TestMethod]
         public void TotalFeeCostTest()
         {
-            //Arrange
             var calculator = new Calculator();
             var dates = new List<DateTime>()
             {
@@ -22,10 +21,8 @@ namespace TollFeeCalculatorTest
             };
             var expected = 8;
 
-            //Act
             var actual = calculator.TotalFeeCost(dates);
 
-            //Assert
             Assert.AreEqual(expected, actual);
         }
 
@@ -72,9 +69,9 @@ namespace TollFeeCalculatorTest
         [TestMethod]
         public void TollFeePassTest()
         {
-            //Arrange
             var calculator = new Calculator();
-            var dates = new Dictionary<DateTime, int>()
+
+            var passingDateTimes = new Dictionary<DateTime, int>()
                 {
                      { DateTime.Parse("2020-09-28 00:00"), 0  },
                      { DateTime.Parse("2020-09-28 06:10"), 8  },
@@ -88,39 +85,34 @@ namespace TollFeeCalculatorTest
                      { DateTime.Parse("2020-09-30 18:10"), 8  },
                      { DateTime.Parse("2020-09-30 18:50"), 0  }
                 };
-            //Assert
-            foreach (var date in dates)
+
+            foreach (var dateTime in passingDateTimes)
             {
-                Assert.AreEqual(date.Value, calculator.TollFeePass(date.Key));
+                Assert.AreEqual(dateTime.Value, calculator.TollFeePass(dateTime.Key));
             }
         }
 
         [TestMethod]
         public void TollPassingTimeDiffTest()
         {
-            //Arrange
             var calculator = new Calculator();
             var expected = 138;
 
-            //Act
             var dateTimes = new List<DateTime>()
             {
                 new DateTime(2020, 06, 30, 08, 52, 00),
                 new DateTime(2020, 06, 30, 06, 34, 00)
             };
 
-            //Assert
             Assert.AreEqual(expected, calculator.TollPassingTimeDiff(dateTimes[0], dateTimes[1]).TotalMinutes);
 		}
 
         [TestMethod]
         public void PrintTotalFeeTest()
         {
-            //Arrange
             ConsoleWriter consoleWriter = new ConsoleWriter();
             string actual;
 
-            //Act
             using (StringWriter stringWriter = new StringWriter())
             {
                 Console.SetOut(stringWriter);
@@ -128,7 +120,6 @@ namespace TollFeeCalculatorTest
                 actual = stringWriter.ToString();
             }
 
-            //Assert
             Assert.AreEqual("The total fee for the inputfile is 500", actual);
         }
 
@@ -151,7 +142,6 @@ namespace TollFeeCalculatorTest
         [TestMethod]
         public void DateTimeParserReadableDatesTest()
         {
-            //Arrange
             var fileReader = new FileReader();
             var dateString = "2020-06-jj 00:05, 2020-06-30 ssevr06:34, 2020-06-30 08:52, 2020-06-30 10:13";
             var expected = new List<DateTime>()
@@ -162,41 +152,34 @@ namespace TollFeeCalculatorTest
                 new DateTime(2020, 06, 30, 10, 13, 00),
             };
 
-            //Act
             var actual = fileReader.DateTimeParser(dateString);
 
-            //Assert
             CollectionAssert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void CostDifferenceTest()
         {
-            //Arrange
             var calculator = new Calculator();
 
             var passingCost = 13;
             var startingIntervalCost = 18;
             var expected = 5;
 
-            //Act
             var actual = calculator.CostDifference(passingCost, startingIntervalCost);
 
-            //Assert
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void FreeTollFeeTest()
         {
-            //Arrange
             var calculator = new Calculator();
 
             var freeMonth = new DateTime(2020, 07, 01);
             var sunday = new DateTime(2020, 06, 28);
             var tuesday = new DateTime(2020, 06, 30);
 
-            //Assert
             Assert.IsTrue(calculator.FreeTollFee(sunday));
             Assert.IsTrue(calculator.FreeTollFee(freeMonth));
             Assert.IsFalse(calculator.FreeTollFee(tuesday));
